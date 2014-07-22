@@ -23,8 +23,9 @@ public class OutLogTest {
 	//定数
 	final static private File file = new File("C:/test/log/log.txt");
 	static PrintWriter pw;
-	//オブジェクトの生成
-
+	//オブジェクトの宣言
+	BufferedReader br = null;
+	StringBuilder sb = new StringBuilder();
 	OutLog ol = new OutLog();
 
 	@Before
@@ -41,11 +42,7 @@ public class OutLogTest {
 		//テストの実行
 		ol.outLogDmp("sample：サンプル");
 
-		//ファイルの読み出し
-		//オブジェクトの宣言
-		BufferedReader br = null;
-		StringBuilder sb = new StringBuilder();
-
+		//文字列の作成
 		sb.append(DateString.getDate14());
 	    sb.append(":sample：サンプル");
 	    
@@ -69,11 +66,7 @@ public class OutLogTest {
 		//テストの実行
 		ol.outLogDmp("sample：12345");
 
-		//ファイルの読み出し
-		//オブジェクトの宣言
-		BufferedReader br = null;
-		StringBuilder sb = new StringBuilder();
-
+		//文字列の作成
 		sb.append(DateString.getDate14());
 	    sb.append(":sample：12345");
 	    
