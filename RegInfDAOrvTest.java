@@ -1,4 +1,4 @@
-package junit;
+package junitrv;
 
 import static org.junit.Assert.*;
 
@@ -31,7 +31,7 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import user.bean.RegistrantInfo;
 import user.parts.RegInfDAO;
 
-public class RegInfDAOTest {
+public class RegInfDAOrvTest {
 	//属性
 	RegInfDAO dao;
 	private InitialContext initCon;
@@ -69,6 +69,9 @@ public class RegInfDAOTest {
 
 	}
 	
+	/**
+	 * DBにアタッチ
+	 */
 	public void conect(){
 		try{
 			this.initCon = new InitialContext();
@@ -80,7 +83,9 @@ public class RegInfDAOTest {
 		}
 	}
 	
-	
+	/**
+	 * DBにデタッチ
+	 */
 	public void closelocal(){
 		try {
 			if(this.rs != null){
@@ -107,23 +112,20 @@ public class RegInfDAOTest {
 			conect();
 			//データテーブル内全権削除
 			ResultSet rs = null;
-			String[] str = new String[10];
 			int count = 0;
 			
 			/**
-			 * while文で行数検索
+			 * SQL文で全行数カウント＆削除
 			 */
-			stmt = con.prepareStatement("SELECT * FROM registrants");//PreparedStatementオブジェクトの生成
+			this.stmt = con.prepareStatement("SELECT * FROM registrants");
 			rs = stmt.executeQuery();
-			while(rs.next()){
-				str[count] = rs.getString("registrant_id");
-				count = count+1;
-			}
-			for(int j=0; j<count; j++){
-				this.stmt = con.prepareStatement("DELETE FROM task.registrants WHERE registrant_id=?");
-				this.stmt.setString(1,str[j]);
-				this.stmt.executeUpdate();
-			}
+			rs.last();
+			count = rs.getRow();
+			
+			this.stmt = con.prepareStatement("DELETE FROM task.registrants LIMIT ?");
+			this.stmt.setInt(1,count);
+			this.stmt.executeUpdate();
+
 			//テキスト追加
 			stmt = con.prepareStatement("INSERT INTO `registrants` VALUES ('001','鈴木太郎','35'),('002','Tommy','25'),('003','山田花子','30')");//PreparedStatementオブジェクトの生成
 			stmt.executeUpdate();//行作成文の実行
